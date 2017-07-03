@@ -1,0 +1,68 @@
+<html>
+<head>
+    <title>Success Page</title>
+</head>
+<body>
+    <a href="{% url 'logout' %}">Logout</a>
+    <h2>Welcome {{ current_user.first_name }}!</h2>
+    <p>Number of Pokes: {{ pokes }}</p>
+    <form action="{% url 'reset_pokes' %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Reset Poke Count" />
+    </form>
+    <h4>My Friends</h4>
+    <table>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>De-Friend</th>
+            <th>Poke</th>
+            <th>Number of Pokes</th>
+        </tr>
+    {% for user in friends %}
+        <tr>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                <a href="{% url 'confirm_remove' id=user.id %}">
+                    <button>Remove Friend</button>
+                </a>
+            </td>
+            <td>
+                <form action="{% url 'poke' id=user.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Poke {{ user.first_name }}" />
+                </form>
+            </td>
+            <td>{{ user.poked_by.all|length }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    <h4>All Users</h4>
+    <table>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Friend</th>
+        </tr>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                <form action="{% url 'add_friend' id=user.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Add {{ user.first_name }} as a friend" />
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+
+</body>
+</html>

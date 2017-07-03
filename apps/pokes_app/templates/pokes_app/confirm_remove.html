@@ -1,0 +1,19 @@
+<html>
+<head>
+    <title>Confirm Remove of Friend</title>
+</head>
+<body>
+    <h1>Confirm To Remove this friend</h1>
+
+    <p>First Name: {{ friend.first_name }}</p>
+    <p>Last Name: {{ friend.last_name }}</p>
+    
+    <a href="{% url 'success' %}">
+        <button>Cancel</button>
+    </a>
+    <form action="{% url 'remove_friend' id=friend.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Remove" />
+    </form>
+</body>
+</html>
